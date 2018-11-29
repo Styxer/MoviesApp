@@ -2,6 +2,7 @@ package com.example.ofir.movieapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.ofir.movieapp.DetailActivity;
+import com.example.ofir.movieapp.GlideApp;
 import com.example.ofir.movieapp.R;
 import com.example.ofir.movieapp.model.Movie;
 
@@ -51,10 +57,22 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
         //TODO: CHANGE TO  GlideApp.With(...)
 
-        Glide.with(context)
+        GlideApp.with(context)
                 .load(selectedMovie.getPosterPath())
+                .placeholder(R.drawable.ic_launcher_background)
+                .listener(new RequestListener<Drawable>(){
+
+                    @Override
+                    public boolean onLoadFailed(GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .into(holder.thumbnail);
-        // .preload(R.drawable.ic_launcher_background)
 
 
     }
@@ -66,15 +84,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
     public class MovieHolder extends RecyclerView.ViewHolder {
 
-        public TextView title, userRating;
-        public ImageView thumbnail;
+        private TextView title, userRating;
+        private ImageView thumbnail;
 
-        public MovieHolder(@NonNull View itemView) {
+        private MovieHolder(@NonNull View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.text_view_movie_title);
-            userRating = itemView.findViewById(R.id.text_view_user_rating);
-            thumbnail = itemView.findViewById(R.id.image_view_thumbnail);
+            title = itemView.findViewById(R.id.title);
+            userRating = itemView.findViewById(R.id.userrating);
+            thumbnail = itemView.findViewById(R.id.thumbnail);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

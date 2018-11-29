@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-        adapter.n
+        adapter.notifyDataSetChanged();
 
         loadJson();
     }
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            Client client = new Client();
+           // Client client = new Client();
             Service apiService = Client.getClient().create(Service.class);
 
             Call<MoviesResponse> call = apiService.getTopRatedMovies(apiKey);
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.movie_settings:
+            case R.id.menu_settings:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
