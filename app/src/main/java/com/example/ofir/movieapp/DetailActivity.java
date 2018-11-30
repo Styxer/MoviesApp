@@ -43,7 +43,7 @@ public class DetailActivity extends AppCompatActivity {
         userRating = findViewById(R.id.userrating);
         releaseDate = findViewById(R.id.releasedate);
 
-        //TODO: CHANGE TO PARCABLE
+        
         Intent intent = getIntent();
         if (intent.hasExtra(Common.SELECTED_MOVIE_KEY)) {
             Bundle bundle = intent.getExtras();
