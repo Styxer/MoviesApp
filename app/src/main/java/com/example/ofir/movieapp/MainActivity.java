@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.ofir.movieapp.Utilities.GridSpacingItemDecoration;
+import com.example.ofir.movieapp.Utilities.Logging;
 import com.example.ofir.movieapp.adapter.MoviesAdapter;
 import com.example.ofir.movieapp.api.Client;
 import com.example.ofir.movieapp.api.Service;
@@ -20,6 +22,7 @@ import com.example.ofir.movieapp.model.MoviesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -29,6 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,14 +42,15 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog pd;
     private SwipeRefreshLayout swiperContainer;
 
-    //TODO: PLANT TIMBER
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        Logging.InitLogging();
+        Timber.d("QuestionActivity started");
         initViews();
 
         swiperContainer = findViewById(R.id.main_content);
@@ -60,18 +65,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public Activity getActivity() {
-        Context context = this;
-        while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
-                return (Activity) context;
-            }
-            context = ((ContextWrapper) context).getBaseContext();
-        }
-
-        return null;
-    }
-
 
     private void initViews() {
         pd = new ProgressDialog(this);
@@ -84,13 +77,15 @@ public class MainActivity extends AppCompatActivity {
         movieList = new ArrayList<>();
         adapter = new MoviesAdapter(this, movieList);
 
-        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-            //TODO : ADD ITEM DECORATION
+
             //recyclerView.addItemDecoration();
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         }
+
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, GridSpacingItemDecoration.dpToPx(10, this), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -100,14 +95,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadJson() {
         String apiKey = BuildConfig.THE_MOVIE_DB_API_TOKEN;
+        Timber.d("loadJson started");
         try {
             if (apiKey.isEmpty()) {
                 Toast.makeText(this, "missing api key from themoviedb.db.org", Toast.LENGTH_SHORT).show();
                 pd.dismiss();
+                Timber.e("loadJson found no API key");
                 return;
             }
 
-           // Client client = new Client();
+            // Client client = new Client();
             Service apiService = Client.getClient().create(Service.class);
 
             Call<MoviesResponse> call = apiService.getTopRatedMovies(apiKey);
@@ -126,12 +123,13 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                    //TODO: ADD ERROR LOG   - t.getMessage();
+
+                    Timber.d(t.getMessage());
                     Toast.makeText(MainActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
-            //TODO ADD ERROR LOG -   e.getMessage();
+            Timber.d(e.getMessage());
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
     }

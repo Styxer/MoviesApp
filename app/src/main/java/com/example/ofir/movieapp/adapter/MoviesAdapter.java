@@ -3,6 +3,7 @@ package com.example.ofir.movieapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.ofir.movieapp.DetailActivity;
 import com.example.ofir.movieapp.GlideApp;
 import com.example.ofir.movieapp.R;
+import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.model.Movie;
 
 import java.util.List;
@@ -55,23 +57,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         String vote = Double.toString(selectedMovie.getVoteAverage());
         holder.userRating.setText(vote);
 
-        //TODO: CHANGE TO  GlideApp.With(...)
 
         GlideApp.with(context)
                 .load(selectedMovie.getPosterPath())
                 .placeholder(R.drawable.ic_launcher_background)
-                .listener(new RequestListener<Drawable>(){
-
-                    @Override
-                    public boolean onLoadFailed(GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
                 .into(holder.thumbnail);
 
 
@@ -102,14 +91,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
                         Movie selectedMovie = movieList.get(pos);
                         //TODO: CHANGE TO PARCABLE
                         Intent intent = new Intent(context, DetailActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         //TODO:CREATE COMMON KEYS
-                        intent.putExtra("original_title", selectedMovie.getOriginalTitle());
+                      /*  intent.putExtra("original_title", selectedMovie.getOriginalTitle());
                         intent.putExtra("poster_path", selectedMovie.getPosterPath());
                         intent.putExtra("overview", selectedMovie.getOverview());
                         intent.putExtra("vote_average", selectedMovie.getVoteAverage());
                         intent.putExtra("release_date", selectedMovie.getReleaseDate());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(Common.SELECTED_MOVIE_KEY, selectedMovie);
+                        intent.putExtras(bundle);
                         context.startActivity(intent);
+
                         //TODO:ADD LOG
                         Toast.makeText(v.getContext(), "clicked on " + selectedMovie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
                     }

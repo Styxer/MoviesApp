@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.example.ofir.movieapp.Utilities.Common;
+import com.example.ofir.movieapp.model.Movie;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -43,12 +45,14 @@ public class DetailActivity extends AppCompatActivity {
 
         //TODO: CHANGE TO PARCABLE
         Intent intent = getIntent();
-        if (intent.hasExtra("original_title")) {
-            String thumbnail = intent.getExtras().getString("poster_path");
-            String movieName = intent.getExtras().getString("original_title");
-            String synopsis = intent.getExtras().getString("overview");
-            String rating = Double.toString(intent.getExtras().getDouble("vote_average", 0));
-            String dateOfRelease = intent.getExtras().getString("release_date");
+        if (intent.hasExtra(Common.SELECTED_MOVIE_KEY)) {
+            Bundle bundle = intent.getExtras();
+            Movie selectedMovie = bundle.getParcelable(Common.SELECTED_MOVIE_KEY);
+            String thumbnail = selectedMovie.getPosterPath();
+            String movieName = selectedMovie.getOriginalTitle();
+            String synopsis = selectedMovie.getOverview();
+            String rating = Double.toString(selectedMovie.getVoteCount());
+            String dateOfRelease = selectedMovie.getReleaseDate();
 
 
             GlideApp.with(this)
