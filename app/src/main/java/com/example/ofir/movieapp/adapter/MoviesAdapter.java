@@ -35,6 +35,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
     private Context context;
     private List<Movie> movieList;
 
+
     public MoviesAdapter(Context context, List<Movie> movieList) {
         this.context = context;
         this.movieList = movieList;
@@ -90,6 +91,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
+
                         Movie selectedMovie = movieList.get(pos);
 
                         Intent intent = new Intent(context, Details2Activity.class);
@@ -109,4 +111,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
 
     }
+
+
 }

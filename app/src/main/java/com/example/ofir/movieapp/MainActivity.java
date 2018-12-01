@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
@@ -92,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         loadJson();
+
+        //adapter.setOnItemClickLitsner(this\\);
     }
 
     private void loadJson() {
@@ -153,4 +156,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
