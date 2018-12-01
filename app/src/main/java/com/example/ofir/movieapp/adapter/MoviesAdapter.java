@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.ofir.movieapp.DetailActivity;
+import com.example.ofir.movieapp.Details2Activity;
 import com.example.ofir.movieapp.GlideApp;
 import com.example.ofir.movieapp.R;
 import com.example.ofir.movieapp.Utilities.Common;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolder> {
 
@@ -89,22 +91,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         Movie selectedMovie = movieList.get(pos);
-                        //TODO: CHANGE TO PARCABLE
-                        Intent intent = new Intent(context, DetailActivity.class);
+
+                        Intent intent = new Intent(context, Details2Activity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        //TODO:CREATE COMMON KEYS
-                      /*  intent.putExtra("original_title", selectedMovie.getOriginalTitle());
-                        intent.putExtra("poster_path", selectedMovie.getPosterPath());
-                        intent.putExtra("overview", selectedMovie.getOverview());
-                        intent.putExtra("vote_average", selectedMovie.getVoteAverage());
-                        intent.putExtra("release_date", selectedMovie.getReleaseDate());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(Common.SELECTED_MOVIE_KEY, selectedMovie);
                         intent.putExtras(bundle);
                         context.startActivity(intent);
 
-                        //TODO:ADD LOG
+                        Timber.d("movie item clicked");
                         Toast.makeText(v.getContext(), "clicked on " + selectedMovie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
                     }
                 }

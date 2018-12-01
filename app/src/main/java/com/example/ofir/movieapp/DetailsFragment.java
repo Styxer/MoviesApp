@@ -1,59 +1,78 @@
 package com.example.ofir.movieapp;
 
+
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import timber.log.Timber;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.bumptech.glide.Glide;
 import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.model.Movie;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import timber.log.Timber;
-
-
-public class DetailActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class DetailsFragment extends Fragment {
 
     private TextView nameOfMovie, plotSynopsis, userRating, releaseDate;
     private ImageView imageView;
 
     private Toolbar toolbar;
 
+    public DetailsFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_details, container, false);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = view.findViewById(R.id.toolbar);
+        try {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        initCollapsingToolbar();
-
-        imageView = findViewById(R.id.thumbnail_image_header);
-        nameOfMovie = findViewById(R.id.title);
-        plotSynopsis = findViewById(R.id.plotsynopsis);
-        userRating = findViewById(R.id.userrating);
-        releaseDate = findViewById(R.id.releasedate);
+       initCollapsingToolbar(view);
 
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(Common.SELECTED_MOVIE_KEY)) {
-            Bundle bundle = intent.getExtras();
-            Movie selectedMovie = bundle.getParcelable(Common.SELECTED_MOVIE_KEY);
+
+        imageView = view.findViewById(R.id.thumbnail_image_header);
+        nameOfMovie = view.findViewById(R.id.title);
+        plotSynopsis = view.findViewById(R.id.plotsynopsis);
+        userRating = view.findViewById(R.id.userrating);
+        releaseDate = view.findViewById(R.id.releasedate);
+
+        Bundle bundle = getArguments();
+        //  if (intent.hasExtra(Common.SELECTED_MOVIE_KEY)) {
+        //Bundle bundle = intent.getExtras();
+
+        if (bundle != null && bundle.containsKey(Common.SELECTED_MOVIE_KEY)) {
+            Movie selectedMovie = getArguments().getParcelable(Common.SELECTED_MOVIE_KEY);
             String thumbnail = selectedMovie.getPosterPath();
             String movieName = selectedMovie.getOriginalTitle();
             String synopsis = selectedMovie.getOverview();
@@ -72,17 +91,18 @@ public class DetailActivity extends AppCompatActivity {
             userRating.setText(rating);
             releaseDate.setText(dateOfRelease);
         } else {
-            Timber.e("no API data");
-            Toast.makeText(this, "no API data", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(getContext(), "missing data", Toast.LENGTH_SHORT).show();
+            Timber.e("missing data");
         }
+
+
+        return view;
     }
 
-
-    private void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
+    private void initCollapsingToolbar(View view) {
+        final CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(" ");
-        AppBarLayout appBarLayout = findViewById(R.id.appbar);
+        AppBarLayout appBarLayout = view.findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.BaseOnOffsetChangedListener() {
@@ -110,4 +130,5 @@ public class DetailActivity extends AppCompatActivity {
 
 
     }
+
 }

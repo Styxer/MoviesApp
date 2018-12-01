@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.Utilities.GridSpacingItemDecoration;
 import com.example.ofir.movieapp.Utilities.Logging;
 import com.example.ofir.movieapp.adapter.MoviesAdapter;
@@ -112,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback<MoviesResponse>() {
                 @Override
                 public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
-                    List<Movie> movies = response.body().getResults();
-                    recyclerView.setAdapter(new MoviesAdapter(getApplicationContext(), movies));
+                    movieList = response.body().getResults();
+                    Common.setMovieList(movieList);
+                    recyclerView.setAdapter(new MoviesAdapter(getApplicationContext(), movieList));
                     recyclerView.smoothScrollToPosition(0);
                     if (swiperContainer.isRefreshing()) {
                         swiperContainer.setRefreshing(false);
