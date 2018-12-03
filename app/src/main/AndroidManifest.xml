@@ -19,16 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MovieDetails.DetailActivity"
-            android:label="Movies"
-            android:parentActivityName=".MovieList.MainActivity"
-            android:theme="@style/Theme.Design.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieList.MainActivity" />
-        </activity>
         <activity android:name=".MovieDetails.Details2Activity"></activity>
+        <activity android:name=".MoviesSettings.SettingsActivity"
+            android:label="Settings" />
     </application>
 
 </manifest>
