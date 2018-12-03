@@ -1,22 +1,20 @@
-package com.example.ofir.movieapp;
+package com.example.ofir.movieapp.MovieList;
 
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.ofir.movieapp.BuildConfig;
+import com.example.ofir.movieapp.MovieDetails.Details2Activity;
+import com.example.ofir.movieapp.R;
 import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.Utilities.GridSpacingItemDecoration;
 import com.example.ofir.movieapp.Utilities.Logging;
-import com.example.ofir.movieapp.adapter.MoviesAdapter;
 import com.example.ofir.movieapp.api.Client;
 import com.example.ofir.movieapp.api.Service;
 import com.example.ofir.movieapp.model.Movie;
@@ -24,7 +22,6 @@ import com.example.ofir.movieapp.model.MoviesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -36,13 +33,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements OnMovieClickListener {
 
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
     ProgressDialog pd;
     private SwipeRefreshLayout swiperContainer;
+    private OnMovieClickListener movieClickListener;
 
 
     @Override
@@ -65,6 +63,8 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
+
+        movieClickListener = this;
     }
 
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity  {
         recyclerView = findViewById(R.id.recycler_view);
 
         movieList = new ArrayList<>();
-        adapter = new MoviesAdapter(this, movieList);
+        adapter = new MoviesAdapter(this, movieList, movieClickListener);
 
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity  {
                 public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                     movieList = response.body().getResults();
                     Common.setMovieList(movieList);
-                    recyclerView.setAdapter(new MoviesAdapter(getApplicationContext(), movieList));
+                    recyclerView.setAdapter(new MoviesAdapter(getApplicationContext(), movieList, movieClickListener));
                     recyclerView.smoothScrollToPosition(0);
                     if (swiperContainer.isRefreshing()) {
                         swiperContainer.setRefreshing(false);
@@ -158,4 +158,16 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    @Override
+    public void onMovieClicked(int itemPosition) {
+        if (itemPosition != RecyclerView.NO_POSITION) {
+            Timber.d("movie item clicked");
+            Intent intent = new Intent(this, Details2Activity.class);
+            intent.putExtra(Common.SELECTED_MOVIE_POSITION_KEY, itemPosition);
+            startActivity(intent);
+        }
+        else{
+            Timber.d(String.format("movie item clicked on invalid position %d", itemPosition));
+        }
+    }
 }

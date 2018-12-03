@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MovieList.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,15 +20,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".MovieDetails.DetailActivity"
             android:label="Movies"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".MovieList.MainActivity"
             android:theme="@style/Theme.Design.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".MovieList.MainActivity" />
         </activity>
-        <activity android:name=".Details2Activity"></activity>
+        <activity android:name=".MovieDetails.Details2Activity"></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,8 @@
-package com.example.ofir.movieapp.adapter;
+package com.example.ofir.movieapp.MovieDetails;
 
 import android.os.Bundle;
 
-import com.example.ofir.movieapp.DetailsFragment;
+import com.example.ofir.movieapp.MovieDetails.DetailsFragment;
 import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.model.Movie;
 

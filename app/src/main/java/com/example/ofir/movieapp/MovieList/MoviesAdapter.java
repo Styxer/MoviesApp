@@ -1,44 +1,33 @@
-package com.example.ofir.movieapp.adapter;
+package com.example.ofir.movieapp.MovieList;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.example.ofir.movieapp.DetailActivity;
-import com.example.ofir.movieapp.Details2Activity;
 import com.example.ofir.movieapp.GlideApp;
 import com.example.ofir.movieapp.R;
-import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.model.Movie;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import timber.log.Timber;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolder> {
 
 
     private Context context;
     private List<Movie> movieList;
+    private OnMovieClickListener movieClickListener;
 
 
-    public MoviesAdapter(Context context, List<Movie> movieList) {
+    public MoviesAdapter(Context context, List<Movie> movieList, OnMovieClickListener movieClickListener) {
         this.context = context;
         this.movieList = movieList;
+        this.movieClickListener = movieClickListener;
 
 
     }
@@ -55,8 +44,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
     @Override
     public void onBindViewHolder(@NonNull MoviesAdapter.MovieHolder holder, int position) {
 
-        Movie selectedMovie = movieList.get(position);
-        holder.title.setText(selectedMovie.getOriginalTitle());
+       // Movie selectedMovie = movieList.get(position);
+        holder.bindMovies(movieList.get(position));
+      /*  holder.title.setText(selectedMovie.getOriginalTitle());
         String vote = Double.toString(selectedMovie.getVoteAverage());
         holder.userRating.setText(vote);
 
@@ -64,7 +54,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         GlideApp.with(context)
                 .load(selectedMovie.getPosterPath())
                 .placeholder(R.drawable.ic_launcher_background)
-                .into(holder.thumbnail);
+                .into(holder.thumbnail);*/
 
 
     }
@@ -74,7 +64,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         return movieList.size();
     }
 
-    public class MovieHolder extends RecyclerView.ViewHolder {
+    public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView title, userRating;
         private ImageView thumbnail;
@@ -85,8 +75,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
             title = itemView.findViewById(R.id.title);
             userRating = itemView.findViewById(R.id.userrating);
             thumbnail = itemView.findViewById(R.id.thumbnail);
+            itemView.setOnClickListener(this);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+      /*      itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
@@ -106,10 +97,28 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
                         Toast.makeText(v.getContext(), "clicked on " + selectedMovie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
+            });*/
         }
 
+        public  void bindMovies(Movie movie){
+            title.setText(movie.getOriginalTitle());
+            String vote = Double.toString(movie.getVoteAverage());
+            userRating.setText(vote);
 
+
+            GlideApp.with(context)
+                    .load(movie.getPosterPath())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(thumbnail);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (movieClickListener != null) {
+                movieClickListener.onMovieClicked(getAdapterPosition());
+            }
+
+        }
     }
 
 

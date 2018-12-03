@@ -1,4 +1,4 @@
-package com.example.ofir.movieapp;
+package com.example.ofir.movieapp.MovieDetails;
 
 
 import android.content.Intent;
@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ofir.movieapp.GlideApp;
+import com.example.ofir.movieapp.R;
 import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.model.Movie;
 import com.google.android.material.appbar.AppBarLayout;
