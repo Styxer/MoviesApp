@@ -19,9 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieDetails.Details2Activity"></activity>
-        <activity android:name=".MoviesSettings.SettingsActivity"
+        <activity android:name=".MovieDetails.Details2Activity" />
+        <activity
+            android:name=".MoviesSettings.SettingsActivity"
             android:label="Settings" />
+        <activity android:name=".Threads.AsyncTaskActivity"></activity>
     </application>
 
 </manifest>

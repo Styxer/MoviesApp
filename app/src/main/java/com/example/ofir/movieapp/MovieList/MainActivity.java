@@ -15,6 +15,7 @@ import com.example.ofir.movieapp.BuildConfig;
 import com.example.ofir.movieapp.MovieDetails.Details2Activity;
 import com.example.ofir.movieapp.MoviesSettings.SettingsActivity;
 import com.example.ofir.movieapp.R;
+import com.example.ofir.movieapp.Threads.AsyncTaskActivity;
 import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.Utilities.GridSpacingItemDecoration;
 import com.example.ofir.movieapp.Utilities.Logging;
@@ -173,10 +174,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.menu_settings:
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+            case R.id.menu_open_async:
+                startActivity(new Intent(MainActivity.this, AsyncTaskActivity.class));
+                return  true;
+
+            case R.id.menu_open_thread_handler:
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

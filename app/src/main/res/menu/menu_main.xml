@@ -6,5 +6,15 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_open_async"
+        android:title="Open async task Activity"
+        android:orderInCategory="200"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_open_thread_handler"
+        android:title="Open thread handler activity"
+        android:orderInCategory="300"
+        app:showAsAction="never"/>
 
 </menu>

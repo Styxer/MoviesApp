@@ -14,6 +14,8 @@ public class Common {
     public static final String SELECTED_MOVIE_KEY  = "SELECTED_MOVIE";
     public static final String SELECTED_MOVIE_POSITION_KEY  = "SELECTED_MOVIE_POSITION";
 
+    public static final String ASYNC_MAIN_CONTENT_KEY  = "ASYNC_MAIN_CONTENT";
+
 
     static List<Movie> movieList;
 
