@@ -16,6 +16,8 @@ public class Common {
 
     public static final String ASYNC_MAIN_CONTENT_KEY  = "ASYNC_MAIN_CONTENT";
 
+    public static final String MOVE_ID_KEY  = "MOVE_ID";
+
 
     static List<Movie> movieList;
 

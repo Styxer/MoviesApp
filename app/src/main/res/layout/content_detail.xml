@@ -2,26 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
     android:background="@color/viewBg"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MovieDetails.DetailActivity"
-    tools:showIn="@layout/activity_detail">
+    tools:context=".MovieDetails.Details2Activity"
+    tools:showIn="@layout/activity_details2">
 
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_alignParentTop="true">-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
@@ -31,9 +31,9 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/name_movie"
                 android:textAlignment="center"
+                android:textColor="@color/design_default_color_primary_dark"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/design_default_color_primary_dark"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/userrating"
@@ -42,8 +42,8 @@
                 android:layout_marginLeft="@dimen/layout_margin_left"
                 android:layout_marginTop="@dimen/layout_margin_top"
                 android:padding="@dimen/padding_layout"
-                android:textSize="20sp"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/plotsynopsis"
@@ -54,9 +54,9 @@
                 android:padding="@dimen/padding_layout"
                 android:text="@string/plot"
                 android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"/>
+                android:textStyle="bold" />
 
             <!--<TextView
                 android:id="@+id/rating"
@@ -80,24 +80,42 @@
                 android:padding="@dimen/padding_layout"
                 android:text="@string/release_date"
                 android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"/>
+                android:textStyle="bold" />
 
-          <!--  <TextView
-                android:id="@+id/text_view_release_date"
+            <TextView
+                android:id="@+id/trailer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin_left"
-                android:layout_marginTop="@dimen/layout_margin_top2"
-                android:padding="@dimen/padding_layout"
-                android:textAlignment="center"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"/>-->
+                android:text="@string/trailer"
+                android:textSize="30sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/plotsynopsis" />
 
-        <!--</LinearLayout>-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/trailer" />
 
-    <!--</ScrollView>-->
+            <!--  <TextView
+                  android:id="@+id/text_view_release_date"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/layout_margin_left"
+                  android:layout_marginTop="@dimen/layout_margin_top2"
+                  android:padding="@dimen/padding_layout"
+                  android:textAlignment="center"
+                  android:textSize="25sp"
+                  android:textStyle="bold"
+                  android:textColor="@color/colorPrimary"/>-->
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

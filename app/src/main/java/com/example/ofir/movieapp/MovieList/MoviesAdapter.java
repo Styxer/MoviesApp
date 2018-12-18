@@ -108,7 +108,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
             GlideApp.with(context)
                     .load(movie.getPosterPath())
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.load)
                     .into(thumbnail);
         }
 

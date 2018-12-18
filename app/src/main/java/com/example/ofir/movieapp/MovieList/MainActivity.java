@@ -182,7 +182,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_open_async:
                 startActivity(new Intent(MainActivity.this, AsyncTaskActivity.class));
                 return  true;
-
             case R.id.menu_open_thread_handler:
 
                 return true;

@@ -24,6 +24,8 @@
             android:name=".MoviesSettings.SettingsActivity"
             android:label="Settings" />
         <activity android:name=".Threads.AsyncTaskActivity"></activity>
+
+        <activity android:name=".MovieTrailer.YouTubePlayerFragmentActivity"></activity>
     </application>
 
 </manifest>

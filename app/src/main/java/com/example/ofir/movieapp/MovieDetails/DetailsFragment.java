@@ -1,13 +1,16 @@
 package com.example.ofir.movieapp.MovieDetails;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 import android.view.LayoutInflater;
@@ -17,12 +20,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ofir.movieapp.BuildConfig;
 import com.example.ofir.movieapp.GlideApp;
+import com.example.ofir.movieapp.MovieTrailer.TrailerAdapter;
 import com.example.ofir.movieapp.R;
 import com.example.ofir.movieapp.Utilities.Common;
+import com.example.ofir.movieapp.api.Client;
+import com.example.ofir.movieapp.api.Service;
 import com.example.ofir.movieapp.model.Movie;
+import com.example.ofir.movieapp.model.Trailer;
+import com.example.ofir.movieapp.model.TrailerResponse;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,6 +46,11 @@ public class DetailsFragment extends Fragment {
     private ImageView imageView;
 
     private Toolbar toolbar;
+
+    private RecyclerView recyclerView;
+    private TrailerAdapter adapter;
+    private List<Trailer> trailerList;
+
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -59,44 +76,11 @@ public class DetailsFragment extends Fragment {
             e.printStackTrace();
         }
 
-       initCollapsingToolbar(view);
+        initCollapsingToolbar(view);
 
+        initViews(view);
 
-
-        imageView = view.findViewById(R.id.thumbnail_image_header);
-        nameOfMovie = view.findViewById(R.id.title);
-        plotSynopsis = view.findViewById(R.id.plotsynopsis);
-        userRating = view.findViewById(R.id.userrating);
-        releaseDate = view.findViewById(R.id.releasedate);
-
-        Bundle bundle = getArguments();
-        //  if (intent.hasExtra(Common.SELECTED_MOVIE_KEY)) {
-        //Bundle bundle = intent.getExtras();
-
-        if (bundle != null && bundle.containsKey(Common.SELECTED_MOVIE_KEY)) {
-            Movie selectedMovie = getArguments().getParcelable(Common.SELECTED_MOVIE_KEY);
-            String thumbnail = selectedMovie.getPosterPath();
-            String movieName = selectedMovie.getOriginalTitle();
-            String synopsis = selectedMovie.getOverview();
-            String rating = Double.toString(selectedMovie.getVoteAverage());
-            String dateOfRelease = selectedMovie.getReleaseDate();
-            dateOfRelease = Common.parseDateToddMMyyyy(dateOfRelease);
-
-
-            GlideApp.with(this)
-                    .load(thumbnail)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(imageView);
-
-            nameOfMovie.setText(movieName);
-            plotSynopsis.setText(synopsis);
-            userRating.setText(rating);
-            releaseDate.setText(dateOfRelease);
-        } else {
-            Toast.makeText(getContext(), "missing data", Toast.LENGTH_SHORT).show();
-            Timber.e("missing data");
-        }
-
+        setArguments();
 
         return view;
     }
@@ -124,13 +108,97 @@ public class DetailsFragment extends Fragment {
                     collapsingToolbarLayout.setTitle(" ");
                     isShown = false;
                 }
-
-
             }
-
         });
+    }
+
+    private void initViews(View view) {
+        trailerList = new ArrayList<>();
+        adapter = new TrailerAdapter(getContext(), trailerList);
+
+        imageView = view.findViewById(R.id.thumbnail_image_header);
+        nameOfMovie = view.findViewById(R.id.title);
+        plotSynopsis = view.findViewById(R.id.plotsynopsis);
+        userRating = view.findViewById(R.id.userrating);
+        releaseDate = view.findViewById(R.id.releasedate);
+
+
+        recyclerView = view.findViewById(R.id.recycler_view_trailers);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
     }
 
+    private void setArguments() {
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null && bundle.containsKey(Common.SELECTED_MOVIE_KEY)) {
+            Movie selectedMovie = getArguments().getParcelable(Common.SELECTED_MOVIE_KEY);
+            String thumbnail = selectedMovie.getPosterPath();
+            String movieName = selectedMovie.getOriginalTitle();
+            String synopsis = selectedMovie.getOverview();
+            String rating = Double.toString(selectedMovie.getVoteAverage());
+            String dateOfRelease = selectedMovie.getReleaseDate();
+            dateOfRelease = Common.parseDateToddMMyyyy(dateOfRelease);
+
+
+            GlideApp.with(this)
+                    .load(thumbnail)
+                    .placeholder(R.drawable.load)
+                    .into(imageView);
+
+            nameOfMovie.setText(movieName);
+            plotSynopsis.setText(synopsis);
+            userRating.setText(rating);
+            releaseDate.setText(dateOfRelease);
+
+            loadJSON(selectedMovie.getId());
+
+        } else {
+            Toast.makeText(getContext(), "missing data", Toast.LENGTH_SHORT).show();
+            Timber.e("missing data");
+        }
+
+    }
+
+    private void loadJSON(int movie_id) {
+
+        try {
+            String apiKey = BuildConfig.THE_MOVIE_DB_API_TOKEN;
+            if (apiKey.isEmpty()) {
+                Toast.makeText(getContext(), "missing API key from themoviedb.org", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            Client client = new Client();
+            Service apiService = client.getClient().create(Service.class);
+            retrofit2.Call<TrailerResponse> call = apiService.getMovieTrailer(movie_id, apiKey);
+
+            call.enqueue(new Callback<TrailerResponse>() {
+                @Override
+                public void onResponse(retrofit2.Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                    List<Trailer> trailers = response.body().getResults();
+                    recyclerView.setAdapter(new TrailerAdapter(getContext(), trailers));
+                    recyclerView.smoothScrollToPosition(0);
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<TrailerResponse> call, Throwable t) {
+                    Timber.d("Error " + t.getMessage());
+                    Toast.makeText(getContext(), "Error fetching trailer data", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } catch (Exception e) {
+            Timber.d("Error" + e.getMessage());
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 }

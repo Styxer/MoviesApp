@@ -22,6 +22,7 @@ public class DetailsFragmentCollectionAdapter extends FragmentStatePagerAdapter 
         Bundle bundle = new Bundle();
         Movie selectedMovie = Common.getMovieList().get(position);
         bundle.putParcelable(Common.SELECTED_MOVIE_KEY, selectedMovie);
+       // bundle.putInt("id", selectedMovie);
         detailsFragment.setArguments(bundle);
         return detailsFragment;
     }
