@@ -38,7 +38,7 @@ public class YouTubePlayerFragmentActivity extends YouTubeBaseActivity
         setContentView(R.layout.youtube_player_fragment);
 
         //initializing and adding YouTubePlayerFragment
-        android.app.FragmentManager fm = getFragmentManager(); 
+        android.app.FragmentManager fm = getFragmentManager();
         String tag = YouTubePlayerFragment.class.getSimpleName();
         YouTubePlayerFragment playerFragment = (YouTubePlayerFragment) fm.findFragmentByTag(tag);
         if (playerFragment == null) {

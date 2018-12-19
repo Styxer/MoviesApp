@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.ofir.movieapp.BuildConfig;
+import com.example.ofir.movieapp.DBData.FavoriteDbHelper;
 import com.example.ofir.movieapp.MovieDetails.Details2Activity;
 import com.example.ofir.movieapp.MoviesSettings.SettingsActivity;
 import com.example.ofir.movieapp.R;
@@ -23,14 +24,12 @@ import com.example.ofir.movieapp.api.Client;
 import com.example.ofir.movieapp.api.Service;
 import com.example.ofir.movieapp.model.Movie;
 import com.example.ofir.movieapp.model.MoviesResponse;
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import androidx.annotation.IntDef;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,7 +41,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements OnMovieClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements OnMovieClickListener, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
@@ -53,6 +52,9 @@ public class MainActivity extends AppCompatActivity
 
     public static final int SORT_BY_POPULAR = 1;
     public static final int SORT_BY_TOP_RATED = 2;
+
+
+
 
 
     @Override
@@ -67,14 +69,9 @@ public class MainActivity extends AppCompatActivity
 
         swiperContainer = findViewById(R.id.main_content);
         swiperContainer.setColorSchemeResources(android.R.color.holo_orange_dark);
-  /*      swiperContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initViews();
-                Toast.makeText(MainActivity.this, "Movies refreshed", Toast.LENGTH_SHORT).show();
 
-            }
-        });*/
+
+
 
         swiperContainer.setOnRefreshListener( () -> {
             initViews();
@@ -83,7 +80,6 @@ public class MainActivity extends AppCompatActivity
 
         movieClickListener = this;
     }
-
 
     private void initViews() {
         pd = new ProgressDialog(this);
@@ -208,11 +204,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Timber.d("preferences updated");
-
-
-       /* for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-            Toast.makeText(this, entry.getValue().toString() + "selected", Toast.LENGTH_SHORT).show();
-        }*/
 
         checkSortOrder();
     }

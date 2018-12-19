@@ -39,7 +39,7 @@
 
             <TextView
                 android:id="@+id/userrating"
-                android:layout_width="match_parent"
+                android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:paddingLeft="@dimen/movie_title_padding"
@@ -48,8 +48,14 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/user_rating" />
 
+            <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                android:id="@+id/favorite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
