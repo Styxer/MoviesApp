@@ -20,6 +20,7 @@ import com.example.ofir.movieapp.Threads.AsyncTaskActivity;
 import com.example.ofir.movieapp.Utilities.Common;
 import com.example.ofir.movieapp.Utilities.GridSpacingItemDecoration;
 import com.example.ofir.movieapp.Utilities.Logging;
+import com.example.ofir.movieapp.Utilities.MovieUtils;
 import com.example.ofir.movieapp.api.Client;
 import com.example.ofir.movieapp.api.Service;
 import com.example.ofir.movieapp.model.Movie;
@@ -46,9 +47,10 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
-    ProgressDialog pd;
+    private ProgressDialog pd;
     private SwipeRefreshLayout swiperContainer;
     private OnMovieClickListener movieClickListener;
+    private  FavoriteDbHelper dbHelper;
 
     public static final int SORT_BY_POPULAR = 1;
     public static final int SORT_BY_TOP_RATED = 2;
@@ -67,19 +69,12 @@ public class MainActivity extends AppCompatActivity
         Timber.d("QuestionActivity started");
         initViews();
 
-        swiperContainer = findViewById(R.id.main_content);
-        swiperContainer.setColorSchemeResources(android.R.color.holo_orange_dark);
 
-
-
-
-        swiperContainer.setOnRefreshListener( () -> {
-            initViews();
-            Toast.makeText(MainActivity.this, "Movies refreshed", Toast.LENGTH_SHORT).show();
-        });
 
         movieClickListener = this;
     }
+
+
 
     private void initViews() {
         pd = new ProgressDialog(this);
@@ -95,7 +90,6 @@ public class MainActivity extends AppCompatActivity
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-            //recyclerView.addItemDecoration();
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         }
@@ -105,15 +99,29 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        dbHelper = new FavoriteDbHelper(this);
+
+        //
 
 
-       // loadJson();
+        //
+
+
+
+        swiperContainer = findViewById(R.id.main_content);
+        swiperContainer.setColorSchemeResources(android.R.color.holo_orange_dark);
+        swiperContainer.setOnRefreshListener( () -> {
+            initViews();
+            Toast.makeText(MainActivity.this, "Movies refreshed", Toast.LENGTH_SHORT).show();
+        });
+
+
         checkSortOrder();
 
-        //adapter.setOnItemClickLitsner(this\\);
+
     }
 
-    private void loadJson(int sortOrder) {
+    private void loadMovieSortOrder(int sortOrder) {
         String apiKey = BuildConfig.THE_MOVIE_DB_API_TOKEN;
         Timber.d("loadJson started");
         try {
@@ -179,7 +187,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, AsyncTaskActivity.class));
                 return  true;
             case R.id.menu_open_thread_handler:
-
+                Toast.makeText(this, "not implemeted yet", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -219,23 +227,26 @@ public class MainActivity extends AppCompatActivity
         if (sortOrder.equals(this.getString(R.string.pref_most_popular))){
             Timber.d("Sorting by most popular");
             Toast.makeText(this, "sort by most popular selected", Toast.LENGTH_SHORT).show();
-            loadJson(SORT_BY_POPULAR);
+            loadMovieSortOrder(SORT_BY_POPULAR);
         }else if (sortOrder.equals(this.getString(R.string.pref_highest_rated))){
             Timber.d("Sorting by highest rated");
             Toast.makeText(this, "sort by highest rated selected", Toast.LENGTH_SHORT).show();
-            loadJson(SORT_BY_TOP_RATED);
+            loadMovieSortOrder(SORT_BY_TOP_RATED);
+        }else if(sortOrder.equals(this.getString(R.string.favorite))){
+            Timber.d("Sorting by favorite");
+            Toast.makeText(this, "sort by favorite selected", Toast.LENGTH_SHORT).show();
+           // MovieUtils.getAllFavorite(this,  movieList, adapter);
+            pd.dismiss();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        if(movieList.isEmpty()){
-            checkSortOrder();
-        }else{
-            //TODO
-        }
+       // PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+
+         checkSortOrder();
+
     }
 
  /*   @Override

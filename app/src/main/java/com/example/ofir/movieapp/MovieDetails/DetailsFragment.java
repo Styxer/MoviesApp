@@ -156,7 +156,7 @@ public class DetailsFragment extends Fragment {
             userRating.setText(rating);
             releaseDate.setText(dateOfRelease);
 
-            loadJSON(selectedMovie.getId());
+            loadMovieTrailer(selectedMovie.getId());
 
         } else {
             Toast.makeText(getContext(), "missing data", Toast.LENGTH_SHORT).show();
@@ -165,7 +165,7 @@ public class DetailsFragment extends Fragment {
 
     }
 
-    private void loadJSON(int movie_id) {
+    private void loadMovieTrailer(int movie_id) {
 
         try {
             String apiKey = BuildConfig.THE_MOVIE_DB_API_TOKEN;

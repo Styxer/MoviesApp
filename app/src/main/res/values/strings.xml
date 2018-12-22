@@ -23,8 +23,9 @@
     <string name="async_pre_execute">count finished</string>
     <string name="async_post_execute">count finished</string>
     <string name="async_on_progress_update">count finished</string>
+    <!-- ***************************************************** -->
 
-    <string name="btn_skip_intro">Skip Intro</string>
+
 
 
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>

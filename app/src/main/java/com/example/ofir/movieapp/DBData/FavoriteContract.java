@@ -12,5 +12,6 @@ public class FavoriteContract implements BaseColumns {
         public static final String COLUMN_USERRATING = "userrating";
         public static final String COLUMN_POSTER_PATH = "posterpath";
         public static final String COLUMN_PLOT_SYNOPSIS = "overview";
+        public static final String COLUMN_IS_FAVORITE = "isFavorite";
     }
 }
