@@ -101,12 +101,6 @@ public class MainActivity extends AppCompatActivity
 
         dbHelper = new FavoriteDbHelper(this);
 
-        //
-
-
-        //
-
-
 
         swiperContainer = findViewById(R.id.main_content);
         swiperContainer.setColorSchemeResources(android.R.color.holo_orange_dark);
@@ -235,7 +229,7 @@ public class MainActivity extends AppCompatActivity
         }else if(sortOrder.equals(this.getString(R.string.favorite))){
             Timber.d("Sorting by favorite");
             Toast.makeText(this, "sort by favorite selected", Toast.LENGTH_SHORT).show();
-           // MovieUtils.getAllFavorite(this,  movieList, adapter);
+            MovieUtils.getAllFavorite(this,  movieList, adapter);
             pd.dismiss();
         }
     }

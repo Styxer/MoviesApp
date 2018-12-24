@@ -77,7 +77,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
                 if (selectedMovie.getIsFavorite()) {
 
-                    saveFavorite[0] = MovieUtils.saveFavorite(context, selectedMovie.getId(), selectedMovie.getTitle(), selectedMovie.getFullPosterPath(), selectedMovie.getVoteAverage(), selectedMovie.getOverview());
+                    saveFavorite[0] = MovieUtils.saveFavorite(context, selectedMovie.getId(), selectedMovie.getTitle(), selectedMovie.getPosterPath(), selectedMovie.getVoteAverage(), selectedMovie.getOverview());
 
                     if (saveFavorite[0]) {
                         editor.putBoolean("Favorite Added", true);
@@ -160,10 +160,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
             String vote = Double.toString(movie.getVoteAverage());
             userRating.setText(vote);
 
-
+            String fullPostPath = movie.getBaseImageUrl() + movie.getPosterPath();
 
             GlideApp.with(context)
-                    .load(movie.getFullPosterPath())
+                    .load(fullPostPath)
                     .placeholder(R.drawable.load)
                     .into(thumbnail);
         }

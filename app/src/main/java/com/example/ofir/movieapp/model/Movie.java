@@ -80,8 +80,9 @@ public class Movie implements Parcelable {
         }
     };
 
-    public String getFullPosterPath() {
-        return  baseImageUrl + posterPath;
+
+    public String getBaseImageUrl() {
+        return baseImageUrl;
     }
 
     public boolean getIsFavorite() {
