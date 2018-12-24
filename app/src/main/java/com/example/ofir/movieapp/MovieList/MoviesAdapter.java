@@ -64,11 +64,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         Movie selectedMovie = movieList.get(position);
         holder.bindMovies(selectedMovie);
 
-        if (MovieUtils.isMovieFavourited(context, selectedMovie.getId())) {
-            holder.favoriteButton.setImageResource(R.drawable.ic_favorite);
-        }else{
-            holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
-        }
+        selectedMovie.setIsFavorite(setFavButton(selectedMovie.getId(), holder));
 
         holder.favoriteButton.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
 
@@ -76,10 +72,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
             @Override
             public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
-                mFavorite[0] = favorite;
-                if (favorite) {
 
-                    saveFavorite[0] = MovieUtils.saveFavorite(context, selectedMovie.getId(), selectedMovie.getTitle(), selectedMovie.getPosterPath(), selectedMovie.getVoteAverage(), selectedMovie.getOverview());
+                selectedMovie.setIsFavorite(setFavButton(selectedMovie.getId(), holder));
+
+                if (selectedMovie.getIsFavorite()) {
+
+                    saveFavorite[0] = MovieUtils.saveFavorite(context, selectedMovie.getId(), selectedMovie.getTitle(), selectedMovie.getFullPosterPath(), selectedMovie.getVoteAverage(), selectedMovie.getOverview());
 
                     if (saveFavorite[0]) {
                         editor.putBoolean("Favorite Added", true);
@@ -102,6 +100,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
                     Snackbar.make(buttonView, "Removed from Favorite",
                             Snackbar.LENGTH_SHORT).show();
                 }
+                //  mFavorite[0] = !mFavorite[0];
+                //    mFavorite[0] = setFavButton(selectedMovie.getId(), holder);
             }
         });
 
@@ -110,7 +110,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         holder.favoriteButton.setOnFavoriteAnimationEndListener(new MaterialFavoriteButton.OnFavoriteAnimationEndListener() {
             @Override
             public void onAnimationEnd(MaterialFavoriteButton buttonView, boolean favorite) {
-                if (!saveFavorite[0] || !mFavorite[0]) {
+                if (!saveFavorite[0] || !selectedMovie.getIsFavorite()) {
                     holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
                 } else {
                     holder.favoriteButton.setImageResource(R.drawable.ic_favorite);
@@ -119,8 +119,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         });
 
 
+    }
 
+    private boolean setFavButton(int movieId, MoviesAdapter.MovieHolder holder) {
+        boolean result;
+        if (MovieUtils.isMovieFavourited(context, movieId)) {
+            holder.favoriteButton.setImageResource(R.drawable.ic_favorite);
+            result = false;
+        } else {
+            holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+            result = true;
+        }
 
+        return result;
     }
 
     @Override
@@ -150,8 +161,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
             userRating.setText(vote);
 
 
+
             GlideApp.with(context)
-                    .load(movie.getPosterPath())
+                    .load(movie.getFullPosterPath())
                     .placeholder(R.drawable.load)
                     .into(thumbnail);
         }

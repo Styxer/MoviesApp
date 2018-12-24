@@ -40,6 +40,12 @@ public class Movie implements Parcelable {
     @SerializedName("vote_average")
     private Double voteAverage;
 
+
+
+    String baseImageUrl = "http://image.tmdb.org/t/p/w185";
+
+
+
     private boolean isFavorite;
 
     public Movie(String posterPath, boolean adult, String overview, String releaseDate, List<Integer> genreIds, Integer id,
@@ -62,7 +68,7 @@ public class Movie implements Parcelable {
         isFavorite = false;
     }
 
-    public Movie(){
+    public Movie() {
 
     }
 
@@ -74,12 +80,20 @@ public class Movie implements Parcelable {
         }
     };
 
-    String baseImageUrl = "http://image.tmdb.org/t/p/w185";
+    public String getFullPosterPath() {
+        return  baseImageUrl + posterPath;
+    }
 
+    public boolean getIsFavorite() {
+        return isFavorite;
+    }
 
+    public void setIsFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     public String getPosterPath() {
-        return  baseImageUrl + posterPath;
+        return   posterPath;
     }
 
     public void setPosterPath(String posterPath) {
